@@ -84,13 +84,60 @@ function App() {
     []
   );
 
+  const twitterColumns = React.useMemo(
+    () => [
+      {
+        Header: "ACCOUNT",
+        accessor: "account", // accessor is the "key" in the data
+      },
+      {
+        Header: "FOLLOWERS",
+        accessor: "followers",
+      },
+      {
+        Header: "EXCLUSIVE FOLLOWERS",
+        accessor: "exclusive",
+      },
+    ],
+    []
+  );
+
+  const twitterData = React.useMemo(
+    () => [
+      {
+        account: "@marwilliamson",
+        followers: 2610335,
+        exclusive: 74.8,
+      },
+      {
+        account: "@marwilliamson",
+        followers: 2610335,
+        exclusive: 74.8,
+      },
+      {
+        account: "@marwilliamson",
+        followers: 2610335,
+        exclusive: 74.8,
+      },
+    ],
+    []
+  );
+
+  // const {
+  //   getTableProps,
+  //   getTableBodyProps,
+  //   headerGroups,
+  //   rows,
+  //   prepareRow,
+  // } = useTable({ twitterColumns, twitterData });
+
   const {
     getTableProps,
     getTableBodyProps,
     headerGroups,
     rows,
     prepareRow,
-  } = useTable({ columns, data });
+  } = useTable({ columns, data }, useSortBy);
 
   function getRowClassName(cell) {
     if (cell.column.Header === "TEAM") return "team-name";
@@ -104,8 +151,16 @@ function App() {
         {headerGroups.map((headerGroup) => (
           <tr {...headerGroup.getHeaderGroupProps()}>
             {headerGroup.headers.map((column) => (
-              <th className="cell" {...column.getHeaderProps()}>
+              <th
+                className="cell"
+                {...column.getHeaderProps(column.getSortByToggleProps())}
+              >
                 {column.render("Header")}
+                <span>
+                  +{" "}
+                  {column.isSorted ? (column.isSortedDesc ? " 🔽" : " 🔼") : ""}
+                  +{" "}
+                </span>
               </th>
             ))}
           </tr>
